@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 // middelware
@@ -13,7 +14,13 @@ func DummyMiddleware(c *gin.Context) {
 
 	log.Println("Im a dummy!")
 
-	log.Println(os.Getenv("MESSAGE"))
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Println("error load env ", err)
+		return
+	}
+
+	log.Println("mesage core ", os.Getenv("MESSAGE"))
 
 	// Pass on to the next-in-chain
 	statusCode := c.Writer.Status()
