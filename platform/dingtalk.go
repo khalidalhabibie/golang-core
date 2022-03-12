@@ -12,7 +12,6 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"time"
 )
 
 type Payload struct {
@@ -32,7 +31,8 @@ type TextModel struct {
 }
 
 func getSignedKey(secret string) (string, string) {
-	timeNow := time.Now().String()
+	// timeNow := time.Now().String()
+	timeNow := "1647065622653"
 	secretEnc := []byte(secret)
 
 	stringToSign := fmt.Sprintf("%v\n%v", timeNow, secret)
