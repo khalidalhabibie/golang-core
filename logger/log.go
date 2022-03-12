@@ -2,10 +2,10 @@ package log
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/gin-gonic/gin"
+	platform "github.com/khalidalhabibie/golang-core/platform"
 )
 
 // middelware
@@ -36,7 +36,10 @@ func DummyMiddleware(c *gin.Context) {
 		// msg += f'\nStack:\n{self.stack}'
 		message += fmt.Sprintf("\nstack: %v \n", c.Errors.Errors())
 
-		log.Println("message ", message)
+		platform.Dingtalk(os.Getenv("DINGTALK_ACCESS_KEY"),
+			os.Getenv("DINGTALK_SECRET_KEY"),
+			message, []string{}, []string{},
+			true)
 
 	}
 

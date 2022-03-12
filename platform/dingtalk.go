@@ -51,7 +51,7 @@ func getSignedKey(secret string) (string, string) {
 
 }
 
-func dingtalk(accessToken, secret, content string, atMobiles, atUserIds []string, isAtAll bool) {
+func Dingtalk(accessToken, secret, content string, atMobiles, atUserIds []string, isAtAll bool) {
 
 	timeStamp, sign := getSignedKey(secret)
 
@@ -73,7 +73,7 @@ func dingtalk(accessToken, secret, content string, atMobiles, atUserIds []string
 	payload.Text.Content = content
 
 	// msgtype
-	payload.Msgtype = "text"	
+	payload.Msgtype = "text"
 
 	postBody, err := json.Marshal(payload)
 	if err != nil {
