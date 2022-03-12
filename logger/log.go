@@ -14,12 +14,11 @@ func DummyMiddleware(c *gin.Context) {
 
 	// Pass on to the next-in-chain
 	statusCode := c.Writer.Status()
-	log.Println(statusCode)
 	if statusCode >= 500 && os.Getenv("IS_REPORT_ERROR_TO_DINGTALK") == "1" {
 		message := fmt.Sprintf("\nWebsite:\n%v\n", (c.Request.Host + c.Request.URL.String()))
 		//  msg += f'\nWebsite:\n{request._current_scheme_host}\n'
 
-		message += fmt.Sprintf("\nError : \n%v : %v \n ", c.Writer.Status(), c.Errors.String())
+		message += fmt.Sprintf("\nError : \n%v : %v \n ", statusCode, c.Errors.String())
 		// msg += f'\nError:\n{err_type}: {self.exception}\n'
 
 		message += fmt.Sprintf("\nMethod and Path: %v : %v\n", c.Request.Method, c.Request.URL.String())
@@ -36,6 +35,8 @@ func DummyMiddleware(c *gin.Context) {
 
 		// msg += f'\nStack:\n{self.stack}'
 		message += fmt.Sprintf("\nstack: %v \n", c.Errors.Errors())
+
+		log.Println("message ", message)
 
 	}
 
