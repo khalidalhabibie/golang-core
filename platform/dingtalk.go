@@ -7,6 +7,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
@@ -89,6 +90,14 @@ func Dingtalk(accessToken, secret, content string, atMobiles, atUserIds []string
 		log.Fatalf("An Error Occurred %v", err)
 		return
 	}
+
 	defer resp.Body.Close()
+	//Read the response body
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	sb := string(body)
+	log.Print(sb)
 
 }
