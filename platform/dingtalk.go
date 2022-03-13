@@ -41,13 +41,11 @@ func getSignedKey(secret string) (string, string) {
 	stringToSignEnc := []byte(stringToSign)
 
 	hmacGenerate := hmac.New(sha256.New, secretEnc)
-	hmacCode, err := hmacGenerate.Write(stringToSignEnc)
-	if err != nil {
-		log.Println("error parsing hmac: ", err)
+	hmacGenerate.Write(stringToSignEnc)
 
-	}
-
-	sign := url.QueryEscape(base64.StdEncoding.EncodeToString([]byte(fmt.Sprint(hmacCode))))
+	sign := url.QueryEscape(base64.StdEncoding.EncodeToString([]byte(
+		hmacGenerate.Sum(nil),
+	)))
 
 	return timeNow, sign
 
