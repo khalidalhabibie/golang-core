@@ -15,7 +15,7 @@ func DummyMiddleware(c *gin.Context) {
 	// Pass on to the next-in-chain
 	statusCode := c.Writer.Status()
 	if statusCode >= 500 && os.Getenv("IS_REPORT_ERROR_TO_DINGTALK") == "1" {
-		message := fmt.Sprintf("%v - ERROR %v ALERT", os.Getenv("APP_ENV"), statusCode)
+		message := fmt.Sprintf("%v - ERROR %v ALERT\n", os.Getenv("APP_ENV"), statusCode)
 
 		message += fmt.Sprintf("\nWebsite:\n%v\n", (c.Request.Host + c.Request.URL.String()))
 		//  msg += f'\nWebsite:\n{request._current_scheme_host}\n'
@@ -26,7 +26,7 @@ func DummyMiddleware(c *gin.Context) {
 		message += fmt.Sprintf("\nMethod and Path: %v : %v\n", c.Request.Method, c.Request.URL.String())
 		// msg += f'\nMethod & Path:\n[{request.method}] - {request.path}\n'
 
-		message += fmt.Sprintf("\nPayload: %v \n", c.Request.Body)
+		message += fmt.Sprintf("\nPayload: %v \n", c.Request)
 		// msg += f'\nPayload:\n{payload}\n'
 
 		message += fmt.Sprintf("\nParams: %v \n", c.Params)
