@@ -26,10 +26,10 @@ func DummyMiddleware(c *gin.Context) {
 		message += fmt.Sprintf("\nMethod and Path: %v : %v\n", c.Request.Method, c.Request.URL.String())
 		// msg += f'\nMethod & Path:\n[{request.method}] - {request.path}\n'
 
-		message += fmt.Sprintf("\nPayload: %v \n", c.Request.PostForm)
+		message += fmt.Sprintf("\nPayload: \n%v \n", c.Request.PostForm)
 		// msg += f'\nPayload:\n{payload}\n'
 
-		message += fmt.Sprintf("\nParams: %v \n", c.Params)
+		message += fmt.Sprintf("\nParams: %v \n", c.Request.URL.Query())
 		// msg += f'\nParams:\n{params}\n'
 
 		// msg += f'\nUser:\n{user_info}\n'
