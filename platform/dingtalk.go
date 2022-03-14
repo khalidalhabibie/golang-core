@@ -90,7 +90,7 @@ func Dingtalk(accessToken, secret, content string, atMobiles, atUserIds []string
 		return
 	}
 
-	log.Println("respon status", resp.Status)
+	log.Println("respone status", resp.Status)
 
 	defer resp.Body.Close()
 	//Read the response body

@@ -15,7 +15,9 @@ func DummyMiddleware(c *gin.Context) {
 	// Pass on to the next-in-chain
 	statusCode := c.Writer.Status()
 	if statusCode >= 500 && os.Getenv("IS_REPORT_ERROR_TO_DINGTALK") == "1" {
-		message := fmt.Sprintf("\nWebsite:\n%v\n", (c.Request.Host + c.Request.URL.String()))
+		message := fmt.Sprintf("%v - ERROR %v ALERT", os.Getenv("APP_ENV"), statusCode)
+
+		message += fmt.Sprintf("\nWebsite:\n%v\n", (c.Request.Host + c.Request.URL.String()))
 		//  msg += f'\nWebsite:\n{request._current_scheme_host}\n'
 
 		message += fmt.Sprintf("\nError : \n%v : %v \n ", statusCode, c.Errors.String())
