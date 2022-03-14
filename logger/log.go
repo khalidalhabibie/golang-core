@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	platform "github.com/khalidalhabibie/golang-core/platform"
 )
@@ -32,11 +33,13 @@ func DummyMiddleware(c *gin.Context) {
 		message += fmt.Sprintf("\nParams: %v \n", c.Request.URL.Query())
 		// msg += f'\nParams:\n{params}\n'
 
+		claims := jwt.ExtractClaims(c)
+
 		// msg += f'\nUser:\n{user_info}\n'
-		message += fmt.Sprintf("\nUser Info: %v \n", "user")
+		message += fmt.Sprintf("\nUser Info:\n %v \n", claims)
 
 		// msg += f'\nStack:\n{self.stack}'
-		message += fmt.Sprintf("\nstack: %v \n", c.Errors.Errors())
+		message += fmt.Sprintf("\nstack:\n %v \n", c.Errors.Errors())
 
 		platform.Dingtalk(os.Getenv("DINGTALK_ACCESS_KEY"),
 			os.Getenv("DINGTALK_SECRET_KEY"),

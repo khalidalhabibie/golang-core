@@ -32,14 +32,12 @@ type TextModel struct {
 }
 
 func getSignedKey(secret string) (string, string) {
-	// timeNow := time.Now().String()
 	timeNow := fmt.Sprintf("%v", time.Now().UnixNano()/int64(time.Millisecond))
 	secretEnc := []byte(secret)
 
 	stringToSign := fmt.Sprintf("%v\n%v", timeNow, secret)
 
 	stringToSignEnc := []byte(stringToSign)
-
 	hmacGenerate := hmac.New(sha256.New, secretEnc)
 	hmacGenerate.Write(stringToSignEnc)
 
@@ -52,7 +50,6 @@ func getSignedKey(secret string) (string, string) {
 }
 
 func Dingtalk(accessToken, secret, content string, atMobiles, atUserIds []string, isAtAll bool) {
-
 	timeStamp, sign := getSignedKey(secret)
 
 	urlDingtalk := os.Getenv("DINGTALK_URL")
@@ -89,8 +86,6 @@ func Dingtalk(accessToken, secret, content string, atMobiles, atUserIds []string
 		log.Fatalf("An Error Occurred %v", err)
 		return
 	}
-
-	log.Println("respone status", resp.Status)
 
 	defer resp.Body.Close()
 	//Read the response body
