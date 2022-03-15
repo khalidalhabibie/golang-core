@@ -33,9 +33,15 @@ func ExceptionLoggingMiddleware(c *gin.Context) {
 		prefix := fmt.Sprintf("%s:", "exception_logging_middleware")
 		key := fmt.Sprintf("%v:%v", statusCode, c.Errors.String())
 
+		dataFromRedis := redisClient.Get(prefix, key)
+		if dataFromRedis != "" {
+			log.Println("error exist ", prefix+key)
+			return
+		}
+
 		err := redisClient.Set(prefix, key, "exist", 1*time.Minute)
 		if err != nil {
-			log.Println("error exist ", prefix+key)
+			log.Println("error set cache in the middleware: ", err)
 			return
 		}
 
