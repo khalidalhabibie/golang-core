@@ -36,6 +36,7 @@ func ExceptionLoggingMiddleware(c *gin.Context) {
 		err := redisClient.Set(prefix, key, "exist", 1*time.Minute)
 		if err != nil {
 			log.Println("error exist ", prefix+key)
+			return
 		}
 
 		claims := jwt.ExtractClaims(c)
