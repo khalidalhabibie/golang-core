@@ -3,18 +3,37 @@ package errors
 import (
 	"fmt"
 	"os"
+	"time"
 
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/khalidalhabibie/golang-core/lib/dingtalk"
+	"github.com/khalidalhabibie/golang-core/lib/redis"
 )
 
 // middelware
-func PostErrorMiddleware(c *gin.Context) {
+func ExceptionLoggingMiddleware(c *gin.Context) {
 	c.Next()
 
 	statusCode := c.Writer.Status()
 	if statusCode >= 500 && os.Getenv("IS_REPORT_ERROR_ACTIVE") == "1" {
+		// check, is exist in redis
+
+		redisCredential := redis.Credentials{
+			Host:     os.Getenv("REDIS_HOST"),
+			Port:     os.Getenv("REDIS_PORT"),
+			Password: os.Getenv("REDIS_PASSWORD"),
+		}
+
+		redisClient := redis.NewClient(redisCredential, os.Getenv("APP_ENV"))
+
+		// '{ACCESS_KEY}:{status_code}:{err_type}
+
+		prefix := fmt.Sprintf("%s:", "exception_logging_middleware")
+		key := fmt.Sprintf("%v:%v", statusCode, c.Errors.String())
+
+		redisClient.Set(prefix, key, "exist", 1*time.Minute)
+
 		claims := jwt.ExtractClaims(c)
 
 		message := fmt.Sprintf("%v - ERROR %v ALERT\n", os.Getenv("APP_ENV"), statusCode)
