@@ -2,6 +2,7 @@ package errors
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"time"
 
@@ -32,7 +33,10 @@ func ExceptionLoggingMiddleware(c *gin.Context) {
 		prefix := fmt.Sprintf("%s:", "exception_logging_middleware")
 		key := fmt.Sprintf("%v:%v", statusCode, c.Errors.String())
 
-		redisClient.Set(prefix, key, "exist", 1*time.Minute)
+		err := redisClient.Set(prefix, key, "exist", 1*time.Minute)
+		if err != nil {
+			log.Println("error exist ", prefix+key)
+		}
 
 		claims := jwt.ExtractClaims(c)
 
